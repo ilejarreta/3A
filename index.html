@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Information</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1>Student Information</h1>
+    <div id="student-info"></div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            fetch('students.xml')
+                .then(response => response.text())
+                .then(data => {
+                    const parser = new DOMParser();
+                    const xml = parser.parseFromString(data, 'application/xml');
+                    const students = xml.getElementsByTagName('student');
+                    let html = '<ul>';
+                    for (let i = 0; i < students.length; i++) {
+                        const name = students[i].getElementsByTagName('name')[0].textContent;
+                        const age = students[i].getElementsByTagName('age')[0].textContent;
+                        const major = students[i].getElementsByTagName('major')[0].textContent;
+                        html += `<li>${name}, Age: ${age}, Major: ${major}</li>`;
+                    }
+                    html += '</ul>';
+                    document.getElementById('student-info').innerHTML = html;
+                });
+        });
+    </script>
+</body>
+</html>
